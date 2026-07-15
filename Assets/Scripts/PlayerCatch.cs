@@ -18,8 +18,7 @@ public class PlayerCatch : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Beer"))
         {
-            Destroy(collision.gameObject);
-            GameManager.Instance.AddScore();
+            GameManager.Instance.BeerCatch(collision.gameObject);
         }
     }
 }
