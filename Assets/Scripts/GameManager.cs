@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Image[] lifeSprites;
     public GameObject gameOverPanel;
     public BeerSpawner beerSpawner;
+    public GameObject catchParticles;
 
     private int score = 0;
     public int lives;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
             beerSpawner.IncreaseDifficulty();
         }
 
+        Instantiate(catchParticles, beer.transform.position + Vector3.down * 0.2f, Quaternion.identity);
         Destroy(beer);
     }
 

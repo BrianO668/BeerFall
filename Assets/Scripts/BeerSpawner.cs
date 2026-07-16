@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BeerSpawner : MonoBehaviour
 {
-    public GameObject beerPrefab;
+    public GameObject[] beerPrefabs;
     public float spawnInterval;
     public float minX;
     public float maxX;
@@ -32,7 +32,7 @@ public class BeerSpawner : MonoBehaviour
 
         Vector3 spawnPosition = new Vector3(randomX, transform.position.y, 0);
 
-        GameObject beer = Instantiate(beerPrefab, spawnPosition, Quaternion.identity);
+        GameObject beer = Instantiate(beerPrefabs[Random.Range(0, beerPrefabs.Length)], spawnPosition, Quaternion.identity);
 
         Rigidbody2D rb = beer.GetComponent<Rigidbody2D>();
 
