@@ -19,6 +19,19 @@ public class PlayerCatch : MonoBehaviour
         if (collision.gameObject.CompareTag("Beer"))
         {
             GameManager.Instance.BeerCatch(collision.gameObject);
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("GoldenBeer"))
+        {
+            GameManager.Instance.GoldenBeerStart(collision.gameObject);
+            return;
+        }
+        
+        if (collision.gameObject.CompareTag("Water"))
+        {
+            GameManager.Instance.WaterCatch(collision.gameObject);
+            return;
         }
     }
 }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class BeerSpawner : MonoBehaviour
+public class ItemSpawner : MonoBehaviour
 {
-    public GameObject[] beerPrefabs;
+    public GameObject[] itemPrefabs;
     public float spawnInterval;
     public float minX;
     public float maxX;
@@ -21,18 +21,34 @@ public class BeerSpawner : MonoBehaviour
 
         if (timer >= spawnInterval)
         {
-            SpawnBeer();
+            SpawnItem();
             timer = 0f;
         }
     }
 
-    void SpawnBeer()
+    void SpawnItem()
     {
-        float randomX = Random.Range(minX, maxX);
+        int randoInt = Random.Range(0, 100);
+
+        GameObject prefabToSpawn;
+
+        if (randoInt < 20)
+        {
+            prefabToSpawn = itemPrefabs[2];
+        }
+        else if (randoInt > 19 && randoInt < 23)
+        {
+            prefabToSpawn = itemPrefabs[3];
+        }
+        else
+        {
+            prefabToSpawn = itemPrefabs[Random.Range(0, 2)];
+        }
+            float randomX = Random.Range(minX, maxX);
 
         Vector3 spawnPosition = new Vector3(randomX, transform.position.y, 0);
 
-        GameObject beer = Instantiate(beerPrefabs[Random.Range(0, beerPrefabs.Length)], spawnPosition, Quaternion.identity);
+        GameObject beer = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
 
         Rigidbody2D rb = beer.GetComponent<Rigidbody2D>();
 

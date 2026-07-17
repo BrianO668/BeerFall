@@ -6,9 +6,15 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public float minX = -8.5f;
     public float maxX = 8.5f;
+    public float jumpForce;
+    public bool isGrounded;
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    public float moveSpeedMultiplier = 1f;
 
+    private float moveInput;
     private Rigidbody2D rb;
-    private Vector2 movement;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,38 +23,52 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Debug.Log("Player awake");
     }
 
     // Update is called once per frame
     void Update()
     {
-        movement = Vector2.zero;
-        bool isWalking = false;
+        moveInput = 0f;
 
+        //Left-right movement
         if (Keyboard.current.leftArrowKey.isPressed ||
             Keyboard.current.aKey.isPressed)
         {
-            movement = Vector2.left;
-            isWalking = true;
+            moveInput = -1f;
             spriteRenderer.flipX = true;
         }
         else if (Keyboard.current.rightArrowKey.isPressed ||
                  Keyboard.current.dKey.isPressed)
         {
-            movement = Vector2.right;
-            isWalking = true;
+            moveInput = 1f;
             spriteRenderer.flipX = false;
         }
 
-        animator.SetBool("isWalking", isWalking);
+        //Jumping
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+
+        animator.SetBool("isWalking", moveInput != 0);
+    }
+
+    public void ChangeMoveSpeedMultiplier(float newValue)
+    {
+        moveSpeedMultiplier = newValue;
     }
 
     private void FixedUpdate()
     {
-        Vector2 newPosition = rb.position + movement * moveSpeed * Time.fixedDeltaTime;
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed * moveSpeedMultiplier, rb.linearVelocity.y);
 
-        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        Vector2 position = rb.position;
+        position.x = Mathf.Clamp(position.x, minX, maxX);
+        rb.position = position;
 
-        rb.MovePosition(newPosition);
+        //Ground checking
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        animator.SetBool("isGrounded", isGrounded);
     }
 }

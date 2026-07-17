@@ -16,6 +16,15 @@ public class DespawnZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameManager.Instance.BeerMiss(collision.gameObject);
+        if (collision.gameObject.CompareTag("Beer") || collision.gameObject.CompareTag("GoldenBeer"))
+        {
+            GameManager.Instance.BeerMiss(collision.gameObject);
+            return;
+        }
+        if (collision.gameObject.CompareTag("Water"))
+        {
+            GameManager.Instance.WaterMiss(collision.gameObject);
+            return;
+        }
     }
 }
