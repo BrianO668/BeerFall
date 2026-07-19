@@ -28,17 +28,21 @@ public class ItemSpawner : MonoBehaviour
 
     void SpawnItem()
     {
-        int randoInt = Random.Range(0, 100);
+        int randoInt = Random.Range(0, 200);
 
         GameObject prefabToSpawn;
 
-        if (randoInt < 20)
+        if (randoInt < 32)
         {
             prefabToSpawn = itemPrefabs[2];
         }
-        else if (randoInt > 19 && randoInt < 23)
+        else if (randoInt > 31 && randoInt < 46)
         {
             prefabToSpawn = itemPrefabs[3];
+        }
+        else if (randoInt > 45 && randoInt < 50)
+        {
+            prefabToSpawn = itemPrefabs[4];
         }
         else
         {

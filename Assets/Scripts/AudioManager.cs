@@ -1,28 +1,44 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
     public AudioClip[] catchSound;
     public AudioClip[] missSound;
-    public AudioClip bgm;
+    public AudioClip[] bgm;
     public float slowDownVal;
     public float beerCatchVol;
     public float brianVol;
     public float bgmVol;
-
-    private AudioSource sfxSource;
-    private AudioSource musicSource;
     void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-        AudioSource[] aSources = GetComponents<AudioSource>();
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ResetBGMPitch();
+    }
 
-        musicSource = aSources[0];
-        sfxSource = aSources[1];
+    public bool MainMenuSceneCheck()
+    {
+        return (SceneManager.GetActiveScene().name == "MainMenu");
+    }
 
-        musicSource.clip = bgm;
+    public void PlayBGM(int song)
+    {
+        musicSource.clip = bgm[song];
         musicSource.loop = true;
         musicSource.volume = bgmVol;
         musicSource.Play();
@@ -38,16 +54,26 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMiss()
     {
+        if (MainMenuSceneCheck()) { return; }
         sfxSource.PlayOneShot(missSound[Random.Range(0, missSound.Length)], brianVol);
     }
 
-    public void PlayGameOver()
+    public void ResetBGMPitch()
     {
-        
+        musicSource.pitch = 1f;
     }
 
+    public void SpeedBGM(float pitch)
+    {
+        musicSource.pitch = pitch;
+    }
     public void SlowBGM()
     {
         musicSource.pitch = slowDownVal;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

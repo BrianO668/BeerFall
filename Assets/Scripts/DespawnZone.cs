@@ -26,5 +26,10 @@ public class DespawnZone : MonoBehaviour
             GameManager.Instance.WaterMiss(collision.gameObject);
             return;
         }
+        if (collision.gameObject.CompareTag("GoldenRecord"))
+        {
+            GameManager.Instance.GoldenRecordMiss(collision.gameObject);
+            return;
+        }
     }
 }

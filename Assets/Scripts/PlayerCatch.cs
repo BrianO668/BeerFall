@@ -33,5 +33,11 @@ public class PlayerCatch : MonoBehaviour
             GameManager.Instance.WaterCatch(collision.gameObject);
             return;
         }
+
+        if (collision.gameObject.CompareTag("GoldenRecord"))
+        {
+            GameManager.Instance.GoldenRecordCatch(collision.gameObject);
+            return;
+        }
     }
 }
